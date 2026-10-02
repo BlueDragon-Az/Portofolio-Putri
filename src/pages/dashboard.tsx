@@ -1,8 +1,27 @@
 import ProjectCard from "../components/projectCard";
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import CertificateCard from "../components/certifCard";
+import { PhoneCall, Mail } from "lucide-react";
+import { useEffect, useState } from "react";
+import { projects, type Project } from "../data/All Projects";
+import ProjectModal from "../components/ProjectModal";
 
 function Dashboard() {
+  const [SelectedProject, setSelectedProject] = useState<Project | null>(null);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const element = document.getElementById(location.hash.replace("#", ""));
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: "smooth" });
+        }, 100);
+      }
+    }
+  }, [location]);
+
   return (
     <main className="min-h-screen bg-linear-to-br from-[#BDEEFF]/10 to-[#07eaff]/20 text-[#FFFFFF]">
       
@@ -16,16 +35,16 @@ function Dashboard() {
             ~/putri/portfolio
           </Link>
 
-          <div className="flex gap-7 font-mono text-md font-semibold text-[#3b99e6]">
-            <Link to="/library" className="transition hover:text-[#FFFFFF]">
+          <div className="mr-3 flex gap-10 font-mono text-md font-semibold text-[#3b99e6]">
+            <Link to="/" className="transition hover:text-[#FFFFFF]">
+              DASHBOARD
+            </Link>
+            <Link to="/Library" className="transition hover:text-[#FFFFFF]">
               WORK
             </Link>
-            <Link to="/" className="transition hover:text-[#FFFFFF]">
-              ABOUT
-            </Link>
-            <Link to="/contact" className="transition hover:text-[#FFFFFF]">
+            <a href="#contact" className="transition hover:text-[#FFFFFF]">
               CONTACT
-            </Link>
+            </a>
           </div>
         </div>
       </nav>
@@ -103,64 +122,34 @@ function Dashboard() {
 
           {/* Project cards */}
           <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
-
-            <ProjectCard
-              number="01"
-              title="Vault of Evidence"
-              category="FEATURED PROJECTS"
-              myRole="Frontend Developer"
-              description="Evidence management platform for organizing worklists, documenting findings, and 
-                storing proof-of-concept evidence in one centralized workspace."
-              tags={["React", "TypeScript", "Tailwind CSS", "REST API", "Vite", "Responsive Design", "Git/Github"]}
-              status="ACTIVE"
-              delay={100}
-              link="/projects/vault-of-evidence"
-            />
-
-            <ProjectCard
-              number="02"
-              title="Hack The Box - The Editor"
-              category="FEATURED PROJECTS"
-              myRole="Penetration Testing Team Member"
-              description="Performed network penetration testing on a Hack The Box machine to identify and exploit 
-                vulnerabilities, gaining initial shell access and escalating privileges to root."
-              tags={["Nmap", "RCE", "CVE-2024-31982", "Reverse Shell", "Privilege Escalation", "Linux"]}
-              status="COMPLETED"
-              delay={250}
-              link="/projects/hack-the-box"
-            />
-
-            <ProjectCard
-              number="03"
-              title="Slang Dictionary"
-              category="FEATURED PROJECTS"
-              myRole="Solo Developer"
-              description="A C-based slang dictionary application that uses a Trie data structure to store, 
-                search for specific word, find words by prefix, and displaying all stored slang words with their meanings."
-              tags={["C", "Data Structures", "Trie", "Algorithms", "Recursion", "String Processing", "Dynamic Memory"]}
-              status="COMPLETED"
-              delay={400}
-              link="/projects/slang-dictionary"
-            />
-
-            <ProjectCard
-              number="04"
-              title="Property Data Management"
-              category="FEATURED PROJECTS"
-              myRole="Solo Developer"
-              description="A C-based property data management program for reading and processing data from CSV files. 
-                Provides features to display, search, sort, and export property data based on various attributes."
-              tags={["C", "Data Processing", "File Handling", "Searching", "Sorting", "CSV"]}
-              status="COMPLETED"
-              delay={550}
-              link="/projects/property-data-management"
-            />
-
+            {projects.slice(0, 4).map((project, index) =>  (
+              <div
+                key={project.number || index}
+                onClick={() => {
+                  console.log("CLICKED", project);
+                  setSelectedProject(project);
+                }}
+                className="cursor-pointer"
+              >
+                <ProjectCard
+                  key={index}
+                  number={String(index + 1).padStart(2, "0")}
+                  title={project.title}
+                  category={project.category}
+                  myRole={project.myRole}
+                  description={project.description}
+                  tags={project.tags}
+                  status={project.status}
+                  delay={(index + 1) * 150} 
+                  link={project.link}
+                />
+              </div>
+            ))}
           </div>
         </div>
 
         <Link 
-          to='/src/pages/library.tsx'
+          to='/Library'
           className="font-mono text-md text-[#07eaff] transition hover:text-[#FFFFFF]"
         >
           $ cd ./project library
@@ -284,22 +273,116 @@ function Dashboard() {
           before:border-t before:border-[#FFFFFF]/50"
       >
         {/* Terminal command */}
-        <div className="-mt-2 font-mono text-md text-[#07eaff]">
+        <div className="-mt-2 ml-7 font-mono text-md text-[#07eaff]">
           $ cat ./contact
           <span className="terminal-cursor ml-1">_</span>
         </div>
 
+        <div className="mt-8 ml-7 flex flex-col justify-between gap-12 md:flex-row md:items-start">
+          <div className="md:w-2/3">
+            <h2 className="text-3xl font-bold font-montserrat text-[#FFFFFF] md:text-5xl">
+              My Contact
+            </h2>
 
+            <p className="mt-4 font-montserrat text-[#C2C2C2] leading-relaxed text-lg max-w-xl">
+              Thank you for taking the time to explore my work and experiences. Each project has been an 
+              opportunity to learn, grow, and challenge myself. I’m always open to new opportunities, 
+              collaborations, and conversations. Feel free to reach out.
+            </p>
+
+            {/* List Contact */}
+            <div className="mt-8 ml-5 flex flex-col gap-3 font-mono text-xl">
+              {/* Phone Number */}
+              <a 
+                href="tel:+6287725100006"
+                className="flex items-center gap-4 text-[#FFFFFF] transition hover:text-[#07eaff]"
+              >
+                <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-[#07eaff]/40 bg-[#07eaff]/10 text-[#07eaff]">
+                  <PhoneCall size={30} />
+                </div>
+                <span>+62-877-2510-0006</span>
+              </a>
+
+              {/* Whatsapp */}
+              <a 
+                href="https://wa.me/6287725100006"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 text-[#FFFFFF] transition hover:text-[#07eaff]"
+              >
+                <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-[#07eaff]/40 bg-[#07eaff]/10 text-[#07eaff]">
+                  <img
+                    src="/whatsapp logo.png"
+                    alt="WhatsApp"
+                    className="h-8 w-8 object-contain"
+                  />
+                </div>
+                <span>WhatsApp</span>
+              </a>
+
+              {/* Email */}
+              <a
+                href="mailto:putri.sofyar26@gmail.com"
+                className="flex items-center gap-4 text-[#FFFFFF] transition hover:text-[#07eaff]"
+              >
+                <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-[#07eaff]/40 bg-[#07eaff]/10 text-[#07eaff]">
+                  <Mail size={30} />
+                </div>
+                <span>putri.sofyar26@gmail.com</span>
+              </a>
+
+              {/* Linkedin */}
+              <a
+                href="https://www.linkedin.com/in/annisa-putri-99320b323/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 text-[#FFFFFF] transition hover:text-[#07eaff]"
+              >
+                <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-[#07eaff]/40 bg-[#07eaff]/10 text-[#07eaff]">
+                  <img
+                    src="/linkedin logo.png"
+                    alt="LinkedIn"
+                    className="h-8 w-8 object-contain"
+                  />
+                </div>
+                <span>Annisa Putri</span>
+              </a>
+
+            </div>
+          </div>
+
+          {/* Foto */}
+          <div className="-mt-10 mr-7 flex justify-center md:w-1/3 md:justify-end">
+            <div className="relative">
+              <div className="h-64 w-64 overflow-hidden rounded-3xl border border-[#07eaff]/50 shadow-[2px_2px_10px_2px_rgba(0,44,73,0.05)] md:h-120 md:w-80">
+                <img
+                  src="/foto formal 1.jpg"
+                  alt="Annisa Putri Fadhilah"
+                  className="h-full w-full scale-120 object-cover object-[25%_40%]"
+                />
+              </div>
+
+              <div className="absolute -bottom-3 -right-3 -z-10 h-full w-full rounded-2xl border border-[#07eaff]/20"/>
+            </div>
+          </div>
+        </div>
       </section>
+      
+      {/* Project Pop-Up Modal */}
+      <ProjectModal
+        project={SelectedProject}
+        onClose={() => setSelectedProject(null)}
+      />
 
       {/* Footer */}
-      <footer className="-mt-10 border-t border-white/10">
+      <footer className="-mt-5 border-t border-white/10">
         <div className="mx-auto max-w-6xl px-6 py-6">
           <p className="font-mono text-sm">
             © PUTRI - 2026
           </p>
         </div>
       </footer>
+
     </main>
   );
 }

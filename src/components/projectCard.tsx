@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { Folder } from 'lucide-react'
-import { Link } from 'react-router-dom'
 
 type ProjectCardProps = {
     number: string
@@ -23,10 +22,9 @@ function ProjectCard ({
     tags,
     status,
     delay,
-    link,
 }: ProjectCardProps) {
 
-    const cardRef = useRef<HTMLAnchorElement>(null)
+    const cardRef = useRef<HTMLDivElement>(null)
     const [isVisible, setIsVisible] = useState(false)
 
     useEffect(() => {
@@ -57,7 +55,7 @@ function ProjectCard ({
             case 'ACTIVE':
                 return 'border-[#17E58F] bg-[#17E58F]/5 text-[#17E58F] text-md'
 
-            case 'DEVELOPMENT':
+            case 'IN DEVELOPMENT':
                 return 'border-[#FFFFFF] bg-[#FFFFFF]/5 text-[#FFFFFF] text-md'
 
             default:
@@ -66,9 +64,8 @@ function ProjectCard ({
     }
 
     return (
-        <Link
+        <div
             ref={cardRef}
-            to={link}
             className={`project-card flex h-full flex-col rounded-2xl bg-linear-to-br from-[#79a3ff]/20 
                 to-[#0051ff]/15 border border-[#FFFFFF] p-7 hover:border-[#FFFFFF] hover:bg-[#3b99e6]/25
                 ${isVisible ? 'project-card-visible' : ''}
@@ -111,7 +108,7 @@ function ProjectCard ({
 
             <div className='ml-3 flex flex-1 flex-col'>
                 {/* Title */}
-                <div className='mt-3 h-8'>
+                <div className='mt-3 h-15'>
                     <h2 className='font-montserrat text-xl font-bold text-[#FFFFFF]'>
                         {title}
                     </h2>
@@ -157,7 +154,7 @@ function ProjectCard ({
                 </span>
             </div>
 
-        </Link>
+        </div>
     )
 }
 

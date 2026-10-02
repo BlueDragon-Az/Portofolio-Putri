@@ -6,21 +6,13 @@ import {
   Terminal
 } from 'lucide-react'
 import { useRef, useState } from "react";
-
-type Project = {
-  number: string;
-  title: string;
-  category: string;
-  myRole: string;
-  description: string;
-  tags: string[];
-  status: string;
-  link: string;
-};
+import { projects, type Project } from "../data/All Projects";
+import ProjectModal from "../components/ProjectModal";
 
 function Library() {
   const [searchTerm, setSearchTerm] = useState('')
   const [categoryFilter, setCategoryFilter] = useState('ALL')
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const projectsRef = useRef<HTMLDivElement>(null);
 
@@ -31,90 +23,17 @@ function Library() {
     });
   };
 
-  const projects: Project[] = [
-    {
-      number: "01",
-      title: "Vault of Evidence",
-      category: "FEATURED PROJECTS",
-      myRole: "Frontend Developer",
-      description: "Evidence management platform for organizing worklists, documenting findings, and storing proof-of-concept evidence in one centralized workspace.",
-      tags: [
-        "React",
-        "TypeScript",
-        "Tailwind CSS",
-        "REST API",
-        "Vite",
-        "Responsive Design",
-        "Git/Github",
-      ],
-      status: "ACTIVE",
-      link: "/projects/vault-of-evidence",
-    },
-    {
-      number: "02",
-      title: "Hack The Box",
-      category: "FEATURED PROJECTS",
-      myRole: "Penetration Testing Team Member",
-      description: "Performed network penetration testing on a Hack The Box machine to identify and exploit vulnerabilities, gaining initial shell access and escalating privileges to root.",
-      tags: [
-        "Nmap",
-        "RCE",
-        "CVE-2024-31982",
-        "Reverse Shell",
-        "Privilege Escalation",
-        "Linux",
-      ],
-      status: "COMPLETED",
-      link: "/projects/hack-the-box",
-    },
-    {
-      number: "03",
-      title: "Slang Dictionary",
-      category: "FEATURED PROJECTS",
-      myRole: "Solo Developer",
-      description: "A C-based slang dictionary application that uses a Trie data structure to store, search for specific words, find words by prefix, and display all stored slang words with their meanings.",
-      tags: [
-        "C",
-        "Data Structures",
-        "Trie",
-        "Algorithms",
-        "Recursion",
-        "String Processing",
-        "Dynamic Memory",
-      ],
-      status: "COMPLETED",
-      link: "/projects/slang-dictionary",
-    },
-    {
-      number: "04",
-      title: "Property Data Management",
-      category: "FEATURED PROJECTS",
-      myRole: "Solo Developer",
-      description: "A C-based property data management program for reading and processing data from CSV files. Provides features to display, search, sort, and export property data based on various attributes.",
-      tags: [
-        "C",
-        "Data Processing",
-        "File Handling",
-        "Searching",
-        "Sorting",
-        "CSV",
-      ],
-      status: "COMPLETED",
-      link: "/projects/property-data-management",
-    },
-  ];
-
   const filteredProjects = projects.filter((project) => {
     const matchesSearch = 
       project.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
       project.tags.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const macthesCategory =
+    const matchesCategory =
       categoryFilter === 'ALL' || 
       project.category === categoryFilter
 
-    return matchesSearch && macthesCategory
+    return matchesSearch && matchesCategory
   }, [searchTerm, categoryFilter]);
 
   const categories = [
@@ -145,6 +64,13 @@ function Library() {
 
           <div className="flex gap-7 font-mono text-md font-semibold text-[#3b99e6]">
             <Link 
+              to="/"
+              className="transition hover:text-[#FFFFFF]"
+            >
+              DASHBOARD
+            </Link>
+
+            <Link 
               to="/library" 
               className="transition hover:text-[#FFFFFF]"
             >
@@ -152,14 +78,7 @@ function Library() {
             </Link>
             
             <Link 
-              to="/"
-              className="transition hover:text-[#FFFFFF]"
-            >
-              ABOUT
-            </Link>
-            
-            <Link 
-              to="/contact"
+              to="/#contact"
               className="transition hover:text-[#FFFFFF]"
             >
               CONTACT
@@ -200,7 +119,7 @@ function Library() {
 
                 <input 
                   type="text"
-                  placeholder="Search Project..."
+                  placeholder="Search Project Name or Tags..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   onKeyDown={(e) => {
@@ -301,18 +220,24 @@ function Library() {
 
                   <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     {group.projects.map((project, index) => (
-                      <ProjectCard
-                        key={project.number}
-                        number={project.number}
-                        title={project.title}
-                        category={project.category}
-                        myRole={project.myRole}
-                        description={project.description}
-                        tags={project.tags}
-                        status={project.status}
-                        delay={index * 150}
-                        link={project.link}
-                      />
+                      <div
+                        key={project.number || index}
+                        onClick={() => setSelectedProject(project)}
+                        className="cursor-pointer"
+                      >
+                        <ProjectCard
+                          key={project.number}
+                          number={project.number}
+                          title={project.title}
+                          category={project.category}
+                          myRole={project.myRole}
+                          description={project.description}
+                          tags={project.tags}
+                          status={project.status}
+                          delay={index * 150}
+                          link={project.link}
+                        />
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -360,6 +285,13 @@ function Library() {
           </p>
         </div>
       </footer>
+
+      {/* Project Pop-Up Modal */}
+      <ProjectModal
+        project={selectedProject}
+        onClose={() => setSelectedProject(null)}
+      />
+      
     </main>
   );
 }
