@@ -195,7 +195,7 @@ export const projects: Project[] = [
     title: "EDUCATION & EQUAL OPPORTUNITY - Exploring Educational Access in Jakarta",
     category: "OTHER ACADEMIC PROJECTS",
     myRole: "Research and Media Team Member",
-    detailedRole: "Contributed to the research process through interview-based data collection, analysis, and the development of the scientific article. Documenting the interview process.Contributed to the research process through interview-based data collection, analysis, and the development of the scientific article. Documenting the interview process.",
+    detailedRole: "Contributed to the research process through interview-based data collection, analysis, and the development of the scientific article. Documenting the interview process.",
     description: "A qualitative research project exploring challenges in educational access for children from low-income families in Jakarta and the role of Yayasan Bulir Padi in addressing these challenges.",
     fullDescription: "A qualitative research project exploring challenges in educational access for children from low-income families in Jakarta and the role of Yayasan Bulir Padi in addressing these challenges. The study involved interviews and documentation to examine the foundation’s educational programs, challenges, and efforts to improve access to education.",
     tags: [
