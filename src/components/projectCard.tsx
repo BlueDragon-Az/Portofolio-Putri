@@ -10,7 +10,6 @@ type ProjectCardProps = {
     tags: string[]
     status: string
     delay: number
-    link: string
 }
 
 function ProjectCard ({

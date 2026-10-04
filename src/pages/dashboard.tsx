@@ -140,8 +140,7 @@ function Dashboard() {
                   description={project.description}
                   tags={project.tags}
                   status={project.status}
-                  delay={(index + 1) * 150} 
-                  link={project.link}
+                  delay={(index + 1) * 150}
                 />
               </div>
             ))}

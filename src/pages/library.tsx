@@ -235,7 +235,6 @@ function Library() {
                           tags={project.tags}
                           status={project.status}
                           delay={index * 150}
-                          link={project.link}
                         />
                       </div>
                     ))}

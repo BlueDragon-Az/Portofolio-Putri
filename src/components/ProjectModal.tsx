@@ -52,12 +52,13 @@ function ProjectModal({ project, onClose }: ProjectModalProps) {
 
         {/* Image Slider / Carousel */}
         {images.length > 0 && (
-          <div className="relative mt-6 overflow-hidden rounded-xl border border-white/10 bg-[#001B2E]">
-            <div className="h-full w-full md:h-90">
+          <div className="relative mt-6 flex overflow-hidden rounded-xl border border-white/10 bg-[#001B2E]">
+            
+            <div className="flex h-64 w-full items-center justify-center p-2 md:h-90">
               <img
                 src={images[currentImageIndex]}
                 alt={`${project.title} screenshot ${currentImageIndex + 1}`}
-                className="h-full w-full object-cover object-[0%_15%]"
+                className="max-h-full w-auto max-w-full rounded-lg object-contain shadow-lg"
               />
             </div>
 
@@ -135,6 +136,23 @@ function ProjectModal({ project, onClose }: ProjectModalProps) {
               <img
                 src="/github logo.png"
                 alt="GitHub"
+                className="h-8 w-8 object-contain" /> VIEW SOURCE CODE
+            </a>
+          )}
+        </div>
+
+        {/* Action Links (GoogleCollab) */}
+        <div className="mt-8 flex flex-wrap gap-4 border-t border-[#FFFFFF]/70 pt-4 font-mono text-xs">
+          {project.gogleCollabLink && (
+            <a
+              href={project.gogleCollabLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 rounded-lg border border-white/20 bg-white px-4 py-2 text-[#000000] font-semibold transition hover:border-[#07eaff] hover:text-[#07eaff]"
+            >
+              <img
+                src="/google collab logo.png"
+                alt="GoogleCollab"
                 className="h-8 w-8 object-contain" /> VIEW SOURCE CODE
             </a>
           )}
